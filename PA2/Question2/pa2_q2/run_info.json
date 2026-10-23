@@ -1,0 +1,35 @@
+{
+  "hardware": "Tesla T4",
+  "torch": "2.11.0+cu128",
+  "epochs": 30,
+  "n_test": 1000,
+  "quick": false,
+  "fig2_videos": [
+    7,
+    12,
+    851
+  ],
+  "stage2": true,
+  "stage3": true,
+  "FIG3_PICKS": [
+    [
+      269,
+      "M"
+    ],
+    [
+      499,
+      "M"
+    ],
+    [
+      31,
+      "R"
+    ],
+    [
+      150,
+      "R"
+    ]
+  ],
+  "FIG5_VIDEO": 17,
+  "D_CHOICE": "D_k5",
+  "FINAL_NAME": "Sym(D)"
+}
