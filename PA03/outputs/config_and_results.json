@@ -1,0 +1,132 @@
+{
+  "seed": 42,
+  "device": "cuda",
+  "hardware": {
+    "python": "3.13.16",
+    "torch": "2.11.0+cu130",
+    "platform": "Linux-6.18.55+-x86_64-with-glibc2.39",
+    "processor": "x86_64",
+    "cpu_count": 4,
+    "device": "cuda",
+    "ram_GB": 33.7,
+    "gpu": "Tesla T4",
+    "gpu_mem_GB": 15.6
+  },
+  "data": {
+    "region": "San Diego (LargeST, District 11)",
+    "nodes": 716,
+    "years": [
+      2020,
+      2021
+    ],
+    "resampling": "5-min counts -> 15-min sums (3x mean of available)",
+    "input_steps": 8,
+    "horizon": 4,
+    "splits": {
+      "train": [
+        "2020-01-01 00:00:00",
+        "2020-12-31 23:45:00"
+      ],
+      "val": [
+        "2021-01-01 00:00:00",
+        "2021-03-31 23:45:00"
+      ],
+      "test": [
+        "2021-04-01 00:00:00",
+        "2021-12-31 23:45:00"
+      ]
+    },
+    "norm": {
+      "mean": 607.386474609375,
+      "std": 483.7696838378906,
+      "source": "observed training values"
+    }
+  },
+  "model": {
+    "hidden_dim": 32,
+    "node_emb_dim": 10,
+    "topk": 20,
+    "residual": true,
+    "temporal_encoder": "2x temporal conv (k=3, same pad)+ReLU, Linear(d*8->d)",
+    "graph_layers": 1,
+    "head": "MLP d->d->4",
+    "fixed_norm": "row D^-1(A+I)"
+  },
+  "training": {
+    "loss": "masked MAE (normalised)",
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "batch": 64,
+    "max_epochs": 30,
+    "early_stopping_patience": 5,
+    "grad_clip": 5.0
+  },
+  "results": {
+    "Temporal-only": {
+      "val_MAE": 58.05027389526367,
+      "val_RMSE": 93.94677734375,
+      "test_MAE": 65.64142608642578,
+      "test_RMSE": 103.93263244628906,
+      "test_MAE_h": [
+        45.373138427734375,
+        59.663780212402344,
+        72.23348236083984,
+        85.2953109741211
+      ],
+      "train_time_s": 152.72591066360474,
+      "epochs_run": 19,
+      "best_epoch": 14,
+      "params": 12644
+    },
+    "STGNN-Fixed": {
+      "val_MAE": 53.51005172729492,
+      "val_RMSE": 86.78825378417969,
+      "test_MAE": 61.584434509277344,
+      "test_RMSE": 97.80956268310547,
+      "test_MAE_h": [
+        43.322811126708984,
+        56.02229309082031,
+        67.50782012939453,
+        79.48482513427734
+      ],
+      "train_time_s": 235.12725925445557,
+      "epochs_run": 27,
+      "best_epoch": 22,
+      "params": 13668
+    },
+    "STGNN-Adaptive": {
+      "val_MAE": 44.23856735229492,
+      "val_RMSE": 72.330322265625,
+      "test_MAE": 53.082855224609375,
+      "test_RMSE": 84.7111587524414,
+      "test_MAE_h": [
+        40.037513732910156,
+        49.392173767089844,
+        57.53208541870117,
+        65.36965942382812
+      ],
+      "train_time_s": 295.30436515808105,
+      "epochs_run": 30,
+      "best_epoch": 29,
+      "params": 27988
+    },
+    "STGNN-Hybrid": {
+      "val_MAE": 45.31832504272461,
+      "val_RMSE": 73.72119140625,
+      "test_MAE": 54.20783233642578,
+      "test_RMSE": 85.65428924560547,
+      "test_MAE_h": [
+        40.44133377075195,
+        50.15691375732422,
+        59.36517333984375,
+        66.867919921875
+      ],
+      "train_time_s": 238.02302980422974,
+      "epochs_run": 24,
+      "best_epoch": 19,
+      "params": 27989
+    }
+  },
+  "hybrid_alpha": 0.02737734094262123
+}
